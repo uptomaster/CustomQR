@@ -8,7 +8,7 @@ export const QR_ECC: 'L' | 'M' | 'Q' | 'H' = 'H'
  * **한 모듈(1칸)의 캔버스 픽셀 수** — 낮을수록 도트가 촘촘해지고(간격=0, 붙은 사각), 화면은 CSS로 키워 픽셀아트 느낌.
  * 2~3이 정밀, 4도 무방. (너무 크면 “큼직한” QR처럼 보임)
  */
-export const Q_EXPORT_CELL = 3
+export const Q_EXPORT_CELL = 4
 
 export type CloudQrPalette = {
   /** 모듈 1(진) */
@@ -38,50 +38,29 @@ export function cloudPaletteForData(data: string): CloudQrPalette {
   }
 }
 
-const SEASON_QR: Record<
-  Season,
-  { dark: string; light: string; hueBase: number; sat: number; lightPct: number }
-> = {
-  spring: {
-    dark: '#231018',
-    light: '#fff7fa',
-    hueBase: 338,
-    sat: 72,
-    lightPct: 60,
-  },
-  summer: {
-    dark: '#0f2418',
-    light: '#f0fdf6',
-    hueBase: 148,
-    sat: 58,
-    lightPct: 52,
-  },
-  autumn: {
-    dark: '#281308',
-    light: '#fffaf4',
-    hueBase: 24,
-    sat: 76,
-    lightPct: 54,
-  },
-  winter: {
-    dark: '#101828',
-    light: '#f0f6ff',
-    hueBase: 208,
-    sat: 62,
-    lightPct: 58,
-  },
+/**
+ * 평면/PNG QR **모듈 2색** — 계절 분위기(봄=벚꽃, 여름=숲, 가을=낙엽, 겨울=하늘) + 스캔 가능한 명도 대비.
+ * 같은 URL이면 격자는 동일, 이 두 색만 계절에 따라 바뀜.
+ */
+const SEASON_QR: Record<Season, { dark: string; light: string }> = {
+  spring: { light: '#fff1f5', dark: '#6b1b3a' },
+  summer: { light: '#ecfef5', dark: '#065f46' },
+  autumn: { light: '#fff6e8', dark: '#7c2d12' },
+  winter: { light: '#d6efff', dark: '#0b5b8c' },
 }
 
-/** 스캔 대비 유지 + 계절 톤(다크/라이트/포인트 액센트). */
+/**
+ * 같은 URL이면 QR **패턴·액센트**는 동일하고, 계절에 따라 **dark/light 모듈 2색**만 바뀜.
+ */
 export function paletteForDataAndSeason(
   data: string,
   season: Season,
 ): CloudQrPalette {
   const h = hashString(data.trim() || ' ')
   const b = SEASON_QR[season]
-  const hue = b.hueBase + (h % 21) - 10
-  const sat = Math.min(82, b.sat + (h % 12) - 5)
-  const l = Math.min(68, b.lightPct + (h % 9) - 4)
+  const hue = 15 + (h % 330)
+  const sat = 58 + (h % 24)
+  const l = 52 + (h % 16)
   return {
     dark: b.dark,
     light: b.light,
