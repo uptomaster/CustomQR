@@ -1,4 +1,5 @@
 import qrcode from 'qrcode-generator'
+import type { Season } from './season'
 
 /** EC H — 약간 뭉개져도 읽힘 */
 export const QR_ECC: 'L' | 'M' | 'Q' | 'H' = 'H'
@@ -27,12 +28,64 @@ function hashString(s: string): number {
   return h >>> 0
 }
 
+/** URL 해시만 반영한 구름 테마(레거시). 미리보기는 `paletteForDataAndSeason` 사용. */
 export function cloudPaletteForData(data: string): CloudQrPalette {
   const h = hashString(data.trim() || ' ')
   return {
     dark: '#1a1214',
     light: '#fff7f8',
     accent: `hsl(${338 + (h % 18)}, 72%, ${62 + (h % 10)}%)`,
+  }
+}
+
+const SEASON_QR: Record<
+  Season,
+  { dark: string; light: string; hueBase: number; sat: number; lightPct: number }
+> = {
+  spring: {
+    dark: '#231018',
+    light: '#fff7fa',
+    hueBase: 338,
+    sat: 72,
+    lightPct: 60,
+  },
+  summer: {
+    dark: '#0f2418',
+    light: '#f0fdf6',
+    hueBase: 148,
+    sat: 58,
+    lightPct: 52,
+  },
+  autumn: {
+    dark: '#281308',
+    light: '#fffaf4',
+    hueBase: 24,
+    sat: 76,
+    lightPct: 54,
+  },
+  winter: {
+    dark: '#101828',
+    light: '#f0f6ff',
+    hueBase: 208,
+    sat: 62,
+    lightPct: 58,
+  },
+}
+
+/** 스캔 대비 유지 + 계절 톤(다크/라이트/포인트 액센트). */
+export function paletteForDataAndSeason(
+  data: string,
+  season: Season,
+): CloudQrPalette {
+  const h = hashString(data.trim() || ' ')
+  const b = SEASON_QR[season]
+  const hue = b.hueBase + (h % 21) - 10
+  const sat = Math.min(82, b.sat + (h % 12) - 5)
+  const l = Math.min(68, b.lightPct + (h % 9) - 4)
+  return {
+    dark: b.dark,
+    light: b.light,
+    accent: `hsl(${hue}, ${sat}%, ${l}%)`,
   }
 }
 
@@ -116,12 +169,13 @@ export type QrEncodeResult = {
 export function getQrResult(
   data: string,
   errorLevel: 'L' | 'M' | 'Q' | 'H' = QR_ECC,
+  season: Season = 'spring',
 ): QrEncodeResult | null {
   const qr0 = createAndMakeQr(data, errorLevel)
   if (!qr0) {
     return null
   }
-  const palette = cloudPaletteForData(data)
+  const palette = paletteForDataAndSeason(data, season)
   const matrix = matrixFrom(qr0)
   const n = matrix.length
   const cellSize = Q_EXPORT_CELL
