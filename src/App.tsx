@@ -1,4 +1,4 @@
-import { lazy, Suspense, useMemo, useState } from 'react'
+import { lazy, Suspense, useMemo, useState, type CSSProperties } from 'react'
 import { getQrResult, type QrEncodeResult } from './lib/qrMatrix'
 import './App.css'
 
@@ -36,9 +36,23 @@ function App() {
   const [text, setText] = useState(PORTFOLIO_URL)
   const qr = useMemo((): QrEncodeResult | null => getQrResult(text), [text])
 
+  const themeStyle =
+    qr != null
+      ? ({
+          ['--u-accent' as string]: qr.palette.accent,
+          ['--u-light' as string]: qr.palette.light,
+        } as CSSProperties)
+      : undefined
+
   return (
-    <div className="shell" data-has-qr={Boolean(qr)}>
+    <div
+      className="shell"
+      data-has-qr={Boolean(qr)}
+      style={themeStyle}
+    >
       <div className="shell__glow" aria-hidden />
+      <div className="shell__blob shell__blob--1" aria-hidden />
+      <div className="shell__blob shell__blob--2" aria-hidden />
       <div className="shell__inner">
         <div className="composer">
           <input
