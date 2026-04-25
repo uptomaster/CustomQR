@@ -1,0 +1,846 @@
+/* 공통: 전체 화면 배경, UI보다 뒤(z-index)는 App.css와 동일 */
+.seasonal-layer {
+  position: fixed;
+  inset: 0;
+  z-index: 2;
+  overflow: hidden;
+  pointer-events: none;
+  contain: layout style paint;
+}
+
+/* 레이아웃·모션 공통 (색·형태는 시즌별) */
+.seasonal-layer .seasonal__a,
+.seasonal-layer .seasonal__b {
+  position: absolute;
+  will-change: transform, opacity;
+}
+
+/* ===== 봄: 벚꽃 잎(오목한 끝·하이라이트·주맥) ===== */
+.seasonal-layer[data-season='spring'] .seasonal__a {
+  top: -6%;
+  border-radius: 0;
+  clip-path: polygon(
+    50% 1%,
+    68% 14%,
+    76% 32%,
+    74% 52%,
+    64% 70%,
+    50% 100%,
+    36% 70%,
+    26% 52%,
+    24% 32%,
+    32% 14%
+  );
+  background:
+    radial-gradient(ellipse 72% 40% at 28% 20%, rgba(255, 255, 255, 0.92) 0%, transparent 54%),
+    radial-gradient(ellipse 50% 35% at 74% 36%, rgba(255, 210, 225, 0.55) 0%, transparent 50%),
+    linear-gradient(162deg, #fff2f7 0%, #ff9eb8 36%, #ff5e8a 66%, #ffeef5 100%);
+  box-shadow: none;
+  filter:
+    drop-shadow(0 1px 2px rgba(160, 50, 90, 0.2))
+    drop-shadow(0 0 5px rgba(255, 150, 185, 0.38));
+}
+
+.seasonal-layer[data-season='spring'] .seasonal__a.path--1,
+.seasonal-layer[data-season='spring'] .seasonal__a.path--3 {
+  clip-path: polygon(
+    50% 0%,
+    62% 10%,
+    74% 22%,
+    78% 40%,
+    70% 58%,
+    50% 100%,
+    30% 58%,
+    22% 40%,
+    26% 22%,
+    38% 10%
+  );
+}
+
+.seasonal-layer[data-season='spring'] .seasonal__a::after {
+  content: '';
+  position: absolute;
+  left: 46%;
+  top: 20%;
+  width: 9%;
+  height: 54%;
+  background: linear-gradient(
+    180deg,
+    rgba(190, 60, 95, 0) 0%,
+    rgba(185, 55, 90, 0.28) 48%,
+    rgba(175, 50, 85, 0.1) 100%
+  );
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.seasonal-layer[data-season='spring'] .seasonal__b {
+  top: -4%;
+  border-radius: 0;
+  clip-path: polygon(
+    50% 2%,
+    66% 16%,
+    74% 34%,
+    70% 54%,
+    50% 100%,
+    30% 54%,
+    26% 34%,
+    34% 16%
+  );
+  background:
+    radial-gradient(ellipse 75% 42% at 30% 22%, rgba(255, 255, 255, 0.85) 0%, transparent 52%),
+    linear-gradient(158deg, #ffe8f0 0%, #ff7a9c 50%, #ffd6e5 100%);
+  box-shadow: none;
+  filter:
+    drop-shadow(0 1px 2px rgba(180, 60, 100, 0.22))
+    drop-shadow(0 0 3px rgba(255, 130, 165, 0.42));
+}
+
+.seasonal-layer[data-season='spring'] .seasonal__b::after {
+  content: '';
+  position: absolute;
+  left: 45%;
+  top: 24%;
+  width: 11%;
+  height: 48%;
+  background: linear-gradient(
+    180deg,
+    rgba(180, 55, 90, 0) 0%,
+    rgba(175, 55, 88, 0.22) 50%,
+    transparent 100%
+  );
+  border-radius: 50%;
+  pointer-events: none;
+  opacity: 0.85;
+}
+
+/* ===== 여름: 잎 실루엣 + 중앙·측맥 ===== */
+.seasonal-layer[data-season='summer'] .seasonal__a {
+  top: -6%;
+  border-radius: 0;
+  clip-path: polygon(
+    50% 2%,
+    82% 42%,
+    76% 62%,
+    50% 98%,
+    24% 62%,
+    18% 42%
+  );
+  background:
+    radial-gradient(ellipse 88% 58% at 40% 36%, rgba(210, 248, 210, 0.55) 0%, transparent 52%),
+    linear-gradient(118deg, #daf2d0 0%, #4fa86a 44%, #1a5a32 74%, #8fd4a0 100%);
+  box-shadow: none;
+  filter: drop-shadow(0 2px 4px rgba(25, 85, 45, 0.28));
+}
+
+.seasonal-layer[data-season='summer'] .seasonal__a.path--1,
+.seasonal-layer[data-season='summer'] .seasonal__a.path--3 {
+  clip-path: polygon(
+    50% 4%,
+    90% 38%,
+    84% 58%,
+    50% 96%,
+    16% 58%,
+    10% 38%
+  );
+}
+
+.seasonal-layer[data-season='summer'] .seasonal__a::after {
+  content: '';
+  position: absolute;
+  inset: 14% 20% 16% 20%;
+  background:
+    linear-gradient(90deg, transparent 46%, rgba(25, 95, 50, 0.38) 50%, transparent 54%),
+    linear-gradient(128deg, transparent 42%, rgba(25, 95, 50, 0.14) 50%, transparent 58%),
+    linear-gradient(52deg, transparent 42%, rgba(25, 95, 50, 0.14) 50%, transparent 58%);
+  pointer-events: none;
+}
+
+.seasonal-layer[data-season='summer'] .seasonal__b {
+  top: -4%;
+  border-radius: 0;
+  clip-path: polygon(
+    50% 4%,
+    78% 44%,
+    50% 94%,
+    22% 44%
+  );
+  background:
+    radial-gradient(ellipse 95% 60% at 38% 38%, rgba(220, 250, 220, 0.45) 0%, transparent 50%),
+    linear-gradient(125deg, #e8f8e0 0%, #5cb86e 52%, #2d7a42 100%);
+  box-shadow: none;
+  filter: drop-shadow(0 1px 3px rgba(35, 110, 55, 0.26));
+}
+
+.seasonal-layer[data-season='summer'] .seasonal__b::after {
+  content: '';
+  position: absolute;
+  inset: 18% 28% 22% 28%;
+  background: linear-gradient(
+    90deg,
+    transparent 45%,
+    rgba(30, 100, 55, 0.32) 50%,
+    transparent 55%
+  );
+  pointer-events: none;
+}
+
+/* ===== 가을: 단풍 실루엣 + 톤별 그라데이션 ===== */
+.seasonal-layer[data-season='autumn'] .seasonal__a {
+  top: -6%;
+  border-radius: 0;
+  clip-path: polygon(
+    50% 0%,
+    54% 26%,
+    76% 12%,
+    66% 40%,
+    96% 36%,
+    72% 56%,
+    90% 84%,
+    56% 70%,
+    50% 100%,
+    44% 70%,
+    10% 84%,
+    28% 56%,
+    4% 36%,
+    34% 40%,
+    24% 12%,
+    46% 26%
+  );
+}
+
+.seasonal-layer[data-season='autumn'] .seasonal__a.path--1,
+.seasonal-layer[data-season='autumn'] .seasonal__a.path--3 {
+  clip-path: polygon(
+    50% 2%,
+    56% 28%,
+    80% 14%,
+    68% 42%,
+    98% 38%,
+    74% 58%,
+    92% 86%,
+    58% 72%,
+    50% 100%,
+    42% 72%,
+    8% 86%,
+    26% 58%,
+    2% 38%,
+    32% 42%,
+    20% 14%,
+    44% 28%
+  );
+}
+
+.seasonal-layer[data-season='autumn'] .seasonal__b {
+  top: -4%;
+  border-radius: 0;
+  clip-path: polygon(
+    50% 0%,
+    55% 30%,
+    78% 16%,
+    68% 44%,
+    94% 40%,
+    72% 60%,
+    86% 86%,
+    56% 74%,
+    50% 100%,
+    44% 74%,
+    14% 86%,
+    28% 60%,
+    6% 40%,
+    32% 44%,
+    22% 16%,
+    45% 30%
+  );
+}
+
+.seasonal-layer[data-season='autumn'] .seasonal__a.seasonal__tone--0 {
+  background:
+    radial-gradient(ellipse 55% 40% at 32% 28%, rgba(255, 230, 200, 0.65) 0%, transparent 52%),
+    linear-gradient(128deg, #ffe4c4 0%, #ea580c 42%, #7c2d12 100%);
+  box-shadow: none;
+  filter: drop-shadow(0 2px 3px rgba(140, 50, 10, 0.28));
+}
+
+.seasonal-layer[data-season='autumn'] .seasonal__a.seasonal__tone--1 {
+  background:
+    radial-gradient(ellipse 50% 38% at 35% 30%, rgba(255, 248, 200, 0.6) 0%, transparent 50%),
+    linear-gradient(122deg, #fef3c7 0%, #ca8a04 48%, #713f12 100%);
+  box-shadow: none;
+  filter: drop-shadow(0 2px 3px rgba(120, 70, 0, 0.26));
+}
+
+.seasonal-layer[data-season='autumn'] .seasonal__a.seasonal__tone--2 {
+  background:
+    radial-gradient(ellipse 52% 40% at 30% 26%, rgba(255, 220, 225, 0.55) 0%, transparent 50%),
+    linear-gradient(132deg, #fecdd3 0%, #b91c1c 45%, #450a0a 100%);
+  box-shadow: none;
+  filter: drop-shadow(0 2px 4px rgba(100, 20, 30, 0.3));
+}
+
+.seasonal-layer[data-season='autumn'] .seasonal__b.seasonal__tone--0 {
+  background: linear-gradient(155deg, #ffedd5, #c2410c);
+  filter: drop-shadow(0 1px 2px rgba(160, 55, 10, 0.25));
+}
+
+.seasonal-layer[data-season='autumn'] .seasonal__b.seasonal__tone--1 {
+  background: linear-gradient(155deg, #fef3c7, #b45309);
+  filter: drop-shadow(0 1px 2px rgba(130, 75, 0, 0.24));
+}
+
+.seasonal-layer[data-season='autumn'] .seasonal__b.seasonal__tone--2 {
+  background: linear-gradient(155deg, #fecdd3, #9f1239);
+  filter: drop-shadow(0 1px 2px rgba(120, 30, 50, 0.26));
+}
+
+.seasonal-layer[data-season='autumn'] .seasonal__a::after {
+  content: '';
+  position: absolute;
+  inset: 22% 38% 28% 38%;
+  background: linear-gradient(
+    90deg,
+    transparent 46%,
+    rgba(80, 35, 10, 0.22) 50%,
+    transparent 54%
+  );
+  pointer-events: none;
+}
+
+.seasonal-layer[data-season='autumn'] .seasonal__a.seasonal__tone--2::after {
+  background: linear-gradient(
+    90deg,
+    transparent 46%,
+    rgba(60, 10, 15, 0.25) 50%,
+    transparent 54%
+  );
+}
+
+.seasonal-layer[data-season='autumn'] .seasonal__b::after {
+  content: '';
+  position: absolute;
+  inset: 26% 40% 32% 40%;
+  background: linear-gradient(
+    90deg,
+    transparent 44%,
+    rgba(90, 40, 12, 0.2) 50%,
+    transparent 56%
+  );
+  pointer-events: none;
+  opacity: 0.85;
+}
+
+/* ===== 겨울: 육·팔각 눈 결정 + 굴절 하이라이트 ===== */
+.seasonal-layer[data-season='winter'] .seasonal__a {
+  top: -5%;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+.seasonal-layer[data-season='winter'] .seasonal__a.path--0,
+.seasonal-layer[data-season='winter'] .seasonal__a.path--2 {
+  clip-path: polygon(
+    50% 0%,
+    57% 36%,
+    96% 26%,
+    62% 50%,
+    96% 74%,
+    57% 64%,
+    50% 100%,
+    43% 64%,
+    4% 74%,
+    38% 50%,
+    4% 26%,
+    43% 36%
+  );
+  background:
+    radial-gradient(circle at 32% 28%, rgba(255, 255, 255, 0.98) 0%, transparent 38%),
+    radial-gradient(circle at 70% 62%, rgba(220, 235, 255, 0.65) 0%, transparent 36%),
+    linear-gradient(148deg, #ffffff 0%, #d0e0f5 45%, #eef6ff 100%);
+  filter:
+    drop-shadow(0 0 3px rgba(255, 255, 255, 0.95))
+    drop-shadow(0 0 8px rgba(180, 210, 255, 0.45));
+}
+
+.seasonal-layer[data-season='winter'] .seasonal__a.path--1,
+.seasonal-layer[data-season='winter'] .seasonal__a.path--3 {
+  clip-path: polygon(
+    50% 0%,
+    74% 20%,
+    100% 50%,
+    74% 80%,
+    50% 100%,
+    26% 80%,
+    0% 50%,
+    26% 20%
+  );
+  background:
+    conic-gradient(
+      from 25deg at 50% 50%,
+      rgba(255, 255, 255, 0.98) 0deg,
+      rgba(200, 220, 250, 0.35) 45deg,
+      rgba(255, 255, 255, 0.95) 90deg,
+      rgba(190, 210, 245, 0.4) 135deg,
+      rgba(255, 255, 255, 0.98) 180deg,
+      rgba(200, 220, 250, 0.35) 225deg,
+      rgba(255, 255, 255, 0.95) 270deg,
+      rgba(190, 210, 245, 0.4) 315deg,
+      rgba(255, 255, 255, 0.98) 360deg
+    );
+  filter:
+    drop-shadow(0 0 2px rgba(255, 255, 255, 0.9))
+    drop-shadow(0 0 7px rgba(170, 200, 255, 0.42));
+}
+
+.seasonal-layer[data-season='winter'] .seasonal__b {
+  top: -3%;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+.seasonal-layer[data-season='winter'] .seasonal__b.path--0,
+.seasonal-layer[data-season='winter'] .seasonal__b.path--2 {
+  clip-path: polygon(
+    50% 2%,
+    58% 38%,
+    94% 30%,
+    64% 50%,
+    94% 70%,
+    58% 62%,
+    50% 98%,
+    42% 62%,
+    6% 70%,
+    36% 50%,
+    6% 30%,
+    42% 38%
+  );
+  background:
+    radial-gradient(circle at 35% 30%, #fff 0%, transparent 40%),
+    linear-gradient(155deg, #ffffff 0%, #d8e6f8 55%, #f2f8ff 100%);
+  filter:
+    drop-shadow(0 0 2px rgba(255, 255, 255, 0.88))
+    drop-shadow(0 0 5px rgba(190, 215, 255, 0.38));
+}
+
+.seasonal-layer[data-season='winter'] .seasonal__b.path--1,
+.seasonal-layer[data-season='winter'] .seasonal__b.path--3 {
+  clip-path: polygon(
+    50% 4%,
+    78% 24%,
+    96% 50%,
+    78% 76%,
+    50% 96%,
+    22% 76%,
+    4% 50%,
+    22% 24%
+  );
+  background:
+    radial-gradient(circle at 40% 35%, rgba(255, 255, 255, 0.95) 0%, transparent 42%),
+    linear-gradient(135deg, #f8fbff 0%, #c8daf0 50%, #e8f2fc 100%);
+  filter:
+    drop-shadow(0 0 2px rgba(255, 255, 255, 0.85))
+    drop-shadow(0 0 5px rgba(180, 205, 255, 0.35));
+}
+
+/* —— 낙하(중력 느낌): 세로는 고정 비율, 가로·회전은 스웨이가 맡음 —— */
+@keyframes sf-fall {
+  0% {
+    top: -10%;
+    opacity: 0;
+  }
+  4% {
+    opacity: 1;
+  }
+  100% {
+    top: 112%;
+    opacity: 0.55;
+  }
+}
+
+@keyframes sf-fall-b {
+  0% {
+    top: -6%;
+    opacity: 0;
+  }
+  3% {
+    opacity: 0.94;
+  }
+  100% {
+    top: 110%;
+    opacity: 0.68;
+  }
+}
+
+@keyframes wi-fall {
+  0% {
+    top: -8%;
+    opacity: 0;
+  }
+  3% {
+    opacity: 1;
+  }
+  100% {
+    top: 115%;
+    opacity: 0.82;
+  }
+}
+
+/* 불균일한 스웨이(각 path마다 %·px·각도가 다름, 50% 대칭 반복 없음) */
+@keyframes sway-m-0 {
+  0% {
+    transform: translate3d(0, 0, 0) rotate(0deg) scale(1);
+  }
+  7% {
+    transform: translate3d(9px, 0, 0) rotate(5deg) scale(1.02);
+  }
+  18% {
+    transform: translate3d(-5px, 0, 0) rotate(-8deg) scale(0.98);
+  }
+  29% {
+    transform: translate3d(3px, 0, 0) rotate(2deg) scale(1.01);
+  }
+  41% {
+    transform: translate3d(-12px, 0, 0) rotate(-11deg) scale(0.97);
+  }
+  58% {
+    transform: translate3d(6px, 0, 0) rotate(7deg) scale(1.03);
+  }
+  74% {
+    transform: translate3d(-3px, 0, 0) rotate(-4deg) scale(0.99);
+  }
+  89% {
+    transform: translate3d(4px, 0, 0) rotate(3deg) scale(1);
+  }
+  100% {
+    transform: translate3d(0, 0, 0) rotate(0deg) scale(1);
+  }
+}
+
+@keyframes sway-m-1 {
+  0% {
+    transform: translate3d(0, 0, 0) rotate(0deg) scale(1);
+  }
+  11% {
+    transform: translate3d(-7px, 0, 0) rotate(-6deg) scale(0.99);
+  }
+  23% {
+    transform: translate3d(14px, 0, 0) rotate(12deg) scale(1.03);
+  }
+  36% {
+    transform: translate3d(-4px, 0, 0) rotate(-2deg) scale(1);
+  }
+  49% {
+    transform: translate3d(8px, 0, 0) rotate(9deg) scale(1.01);
+  }
+  63% {
+    transform: translate3d(-11px, 0, 0) rotate(-10deg) scale(0.96);
+  }
+  78% {
+    transform: translate3d(5px, 0, 0) rotate(4deg) scale(1.02);
+  }
+  92% {
+    transform: translate3d(-2px, 0, 0) rotate(-2deg) scale(1);
+  }
+  100% {
+    transform: translate3d(0, 0, 0) rotate(0deg) scale(1);
+  }
+}
+
+@keyframes sway-m-2 {
+  0% {
+    transform: translate3d(0, 0, 0) rotate(0deg) scale(1);
+  }
+  14% {
+    transform: translate3d(5px, 0, 0) rotate(8deg) scale(1.02);
+  }
+  27% {
+    transform: translate3d(-13px, 0, 0) rotate(-7deg) scale(0.97);
+  }
+  38% {
+    transform: translate3d(11px, 0, 0) rotate(6deg) scale(1.01);
+  }
+  52% {
+    transform: translate3d(-6px, 0, 0) rotate(-5deg) scale(0.99);
+  }
+  66% {
+    transform: translate3d(2px, 0, 0) rotate(1deg) scale(1);
+  }
+  81% {
+    transform: translate3d(-9px, 0, 0) rotate(-9deg) scale(0.98);
+  }
+  95% {
+    transform: translate3d(7px, 0, 0) rotate(5deg) scale(1.01);
+  }
+  100% {
+    transform: translate3d(0, 0, 0) rotate(0deg) scale(1);
+  }
+}
+
+@keyframes sway-m-3 {
+  0% {
+    transform: translate3d(0, 0, 0) rotate(0deg) scale(1);
+  }
+  9% {
+    transform: translate3d(-10px, 0, 0) rotate(-9deg) scale(0.96);
+  }
+  22% {
+    transform: translate3d(7px, 0, 0) rotate(6deg) scale(1.03);
+  }
+  35% {
+    transform: translate3d(4px, 0, 0) rotate(3deg) scale(1.01);
+  }
+  46% {
+    transform: translate3d(-8px, 0, 0) rotate(-6deg) scale(0.98);
+  }
+  61% {
+    transform: translate3d(13px, 0, 0) rotate(11deg) scale(1.02);
+  }
+  72% {
+    transform: translate3d(-5px, 0, 0) rotate(-3deg) scale(1);
+  }
+  86% {
+    transform: translate3d(6px, 0, 0) rotate(5deg) scale(0.99);
+  }
+  100% {
+    transform: translate3d(0, 0, 0) rotate(0deg) scale(1);
+  }
+}
+
+@keyframes sway-s-0 {
+  0% {
+    transform: translate3d(0, 0, 0) rotate(0deg) scale(1);
+  }
+  12% {
+    transform: translate3d(12px, 0, 0) rotate(11deg) scale(1.04);
+  }
+  26% {
+    transform: translate3d(-8px, 0, 0) rotate(-14deg) scale(0.93);
+  }
+  40% {
+    transform: translate3d(5px, 0, 0) rotate(6deg) scale(1.02);
+  }
+  55% {
+    transform: translate3d(-15px, 0, 0) rotate(-12deg) scale(0.95);
+  }
+  71% {
+    transform: translate3d(9px, 0, 0) rotate(9deg) scale(1.05);
+  }
+  87% {
+    transform: translate3d(-4px, 0, 0) rotate(-5deg) scale(0.98);
+  }
+  100% {
+    transform: translate3d(0, 0, 0) rotate(0deg) scale(1);
+  }
+}
+
+@keyframes sway-s-1 {
+  0% {
+    transform: translate3d(0, 0, 0) rotate(0deg) scale(1);
+  }
+  8% {
+    transform: translate3d(-11px, 0, 0) rotate(-13deg) scale(0.94);
+  }
+  21% {
+    transform: translate3d(16px, 0, 0) rotate(15deg) scale(1.06);
+  }
+  34% {
+    transform: translate3d(-6px, 0, 0) rotate(-4deg) scale(1);
+  }
+  48% {
+    transform: translate3d(10px, 0, 0) rotate(10deg) scale(1.03);
+  }
+  64% {
+    transform: translate3d(-14px, 0, 0) rotate(-11deg) scale(0.92);
+  }
+  79% {
+    transform: translate3d(7px, 0, 0) rotate(7deg) scale(1.04);
+  }
+  94% {
+    transform: translate3d(-3px, 0, 0) rotate(-3deg) scale(1);
+  }
+  100% {
+    transform: translate3d(0, 0, 0) rotate(0deg) scale(1);
+  }
+}
+
+@keyframes sway-s-2 {
+  0% {
+    transform: translate3d(0, 0, 0) rotate(0deg) scale(1);
+  }
+  15% {
+    transform: translate3d(8px, 0, 0) rotate(12deg) scale(1.05);
+  }
+  30% {
+    transform: translate3d(-12px, 0, 0) rotate(-10deg) scale(0.94);
+  }
+  44% {
+    transform: translate3d(14px, 0, 0) rotate(14deg) scale(1.03);
+  }
+  59% {
+    transform: translate3d(-7px, 0, 0) rotate(-6deg) scale(0.97);
+  }
+  73% {
+    transform: translate3d(4px, 0, 0) rotate(4deg) scale(1.01);
+  }
+  88% {
+    transform: translate3d(-9px, 0, 0) rotate(-8deg) scale(0.96);
+  }
+  100% {
+    transform: translate3d(0, 0, 0) rotate(0deg) scale(1);
+  }
+}
+
+@keyframes sway-s-3 {
+  0% {
+    transform: translate3d(0, 0, 0) rotate(0deg) scale(1);
+  }
+  10% {
+    transform: translate3d(-9px, 0, 0) rotate(-10deg) scale(0.95);
+  }
+  24% {
+    transform: translate3d(13px, 0, 0) rotate(13deg) scale(1.05);
+  }
+  37% {
+    transform: translate3d(6px, 0, 0) rotate(5deg) scale(1.02);
+  }
+  51% {
+    transform: translate3d(-16px, 0, 0) rotate(-15deg) scale(0.91);
+  }
+  66% {
+    transform: translate3d(11px, 0, 0) rotate(11deg) scale(1.06);
+  }
+  80% {
+    transform: translate3d(-5px, 0, 0) rotate(-4deg) scale(0.99);
+  }
+  93% {
+    transform: translate3d(5px, 0, 0) rotate(5deg) scale(1);
+  }
+  100% {
+    transform: translate3d(0, 0, 0) rotate(0deg) scale(1);
+  }
+}
+
+/* path × 시즌별 낙하: 봄/여름/가을은 동일 중력 곡선, 겨울만 조금 떨림 느낌 */
+.seasonal-layer[data-season='spring'] .seasonal__a.path--0,
+.seasonal-layer[data-season='summer'] .seasonal__a.path--0,
+.seasonal-layer[data-season='autumn'] .seasonal__a.path--0 {
+  animation-name: sf-fall, sway-m-0;
+  animation-timing-function: cubic-bezier(0.33, 0, 0.18, 1),
+    cubic-bezier(0.42, 0, 0.32, 1);
+  animation-iteration-count: infinite, infinite;
+}
+.seasonal-layer[data-season='spring'] .seasonal__a.path--1,
+.seasonal-layer[data-season='summer'] .seasonal__a.path--1,
+.seasonal-layer[data-season='autumn'] .seasonal__a.path--1 {
+  animation-name: sf-fall, sway-m-1;
+  animation-timing-function: cubic-bezier(0.33, 0, 0.18, 1),
+    cubic-bezier(0.42, 0, 0.32, 1);
+  animation-iteration-count: infinite, infinite;
+}
+.seasonal-layer[data-season='spring'] .seasonal__a.path--2,
+.seasonal-layer[data-season='summer'] .seasonal__a.path--2,
+.seasonal-layer[data-season='autumn'] .seasonal__a.path--2 {
+  animation-name: sf-fall, sway-m-2;
+  animation-timing-function: cubic-bezier(0.33, 0, 0.18, 1),
+    cubic-bezier(0.42, 0, 0.32, 1);
+  animation-iteration-count: infinite, infinite;
+}
+.seasonal-layer[data-season='spring'] .seasonal__a.path--3,
+.seasonal-layer[data-season='summer'] .seasonal__a.path--3,
+.seasonal-layer[data-season='autumn'] .seasonal__a.path--3 {
+  animation-name: sf-fall, sway-m-3;
+  animation-timing-function: cubic-bezier(0.33, 0, 0.18, 1),
+    cubic-bezier(0.42, 0, 0.32, 1);
+  animation-iteration-count: infinite, infinite;
+}
+
+.seasonal-layer[data-season='winter'] .seasonal__a.path--0 {
+  animation-name: wi-fall, sway-m-0;
+  animation-timing-function: cubic-bezier(0.26, 0, 0.15, 1),
+    cubic-bezier(0.38, 0, 0.28, 1);
+  animation-iteration-count: infinite, infinite;
+}
+.seasonal-layer[data-season='winter'] .seasonal__a.path--1 {
+  animation-name: wi-fall, sway-m-1;
+  animation-timing-function: cubic-bezier(0.26, 0, 0.15, 1),
+    cubic-bezier(0.38, 0, 0.28, 1);
+  animation-iteration-count: infinite, infinite;
+}
+.seasonal-layer[data-season='winter'] .seasonal__a.path--2 {
+  animation-name: wi-fall, sway-m-2;
+  animation-timing-function: cubic-bezier(0.26, 0, 0.15, 1),
+    cubic-bezier(0.38, 0, 0.28, 1);
+  animation-iteration-count: infinite, infinite;
+}
+.seasonal-layer[data-season='winter'] .seasonal__a.path--3 {
+  animation-name: wi-fall, sway-m-3;
+  animation-timing-function: cubic-bezier(0.26, 0, 0.15, 1),
+    cubic-bezier(0.38, 0, 0.28, 1);
+  animation-iteration-count: infinite, infinite;
+}
+
+.seasonal-layer[data-season='spring'] .seasonal__b.path--0,
+.seasonal-layer[data-season='summer'] .seasonal__b.path--0,
+.seasonal-layer[data-season='autumn'] .seasonal__b.path--0 {
+  animation-name: sf-fall-b, sway-s-0;
+  animation-timing-function: cubic-bezier(0.34, 0, 0.2, 1),
+    cubic-bezier(0.45, 0, 0.34, 1);
+  animation-iteration-count: infinite, infinite;
+}
+.seasonal-layer[data-season='spring'] .seasonal__b.path--1,
+.seasonal-layer[data-season='summer'] .seasonal__b.path--1,
+.seasonal-layer[data-season='autumn'] .seasonal__b.path--1 {
+  animation-name: sf-fall-b, sway-s-1;
+  animation-timing-function: cubic-bezier(0.34, 0, 0.2, 1),
+    cubic-bezier(0.45, 0, 0.34, 1);
+  animation-iteration-count: infinite, infinite;
+}
+.seasonal-layer[data-season='spring'] .seasonal__b.path--2,
+.seasonal-layer[data-season='summer'] .seasonal__b.path--2,
+.seasonal-layer[data-season='autumn'] .seasonal__b.path--2 {
+  animation-name: sf-fall-b, sway-s-2;
+  animation-timing-function: cubic-bezier(0.34, 0, 0.2, 1),
+    cubic-bezier(0.45, 0, 0.34, 1);
+  animation-iteration-count: infinite, infinite;
+}
+.seasonal-layer[data-season='spring'] .seasonal__b.path--3,
+.seasonal-layer[data-season='summer'] .seasonal__b.path--3,
+.seasonal-layer[data-season='autumn'] .seasonal__b.path--3 {
+  animation-name: sf-fall-b, sway-s-3;
+  animation-timing-function: cubic-bezier(0.34, 0, 0.2, 1),
+    cubic-bezier(0.45, 0, 0.34, 1);
+  animation-iteration-count: infinite, infinite;
+}
+
+.seasonal-layer[data-season='winter'] .seasonal__b.path--0 {
+  animation-name: wi-fall, sway-s-0;
+  animation-timing-function: cubic-bezier(0.28, 0, 0.16, 1),
+    cubic-bezier(0.4, 0, 0.3, 1);
+  animation-iteration-count: infinite, infinite;
+}
+.seasonal-layer[data-season='winter'] .seasonal__b.path--1 {
+  animation-name: wi-fall, sway-s-1;
+  animation-timing-function: cubic-bezier(0.28, 0, 0.16, 1),
+    cubic-bezier(0.4, 0, 0.3, 1);
+  animation-iteration-count: infinite, infinite;
+}
+.seasonal-layer[data-season='winter'] .seasonal__b.path--2 {
+  animation-name: wi-fall, sway-s-2;
+  animation-timing-function: cubic-bezier(0.28, 0, 0.16, 1),
+    cubic-bezier(0.4, 0, 0.3, 1);
+  animation-iteration-count: infinite, infinite;
+}
+.seasonal-layer[data-season='winter'] .seasonal__b.path--3 {
+  animation-name: wi-fall, sway-s-3;
+  animation-timing-function: cubic-bezier(0.28, 0, 0.16, 1),
+    cubic-bezier(0.4, 0, 0.3, 1);
+  animation-iteration-count: infinite, infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .seasonal-layer:not(.settled-debris) .seasonal__a,
+  .seasonal-layer:not(.settled-debris) .seasonal__b {
+    animation: none !important;
+    top: 12% !important;
+    opacity: 0.4 !important;
+  }
+}
