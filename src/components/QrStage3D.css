@@ -1,4 +1,7 @@
+/* QR 캔버스: 단정한 트로프 — 화려한 연출은 페이지 배경(index.css) */
+
 .qr-stage-3d {
+  position: relative;
   width: 100%;
   min-height: 300px;
   max-height: min(400px, 50vh);
@@ -6,17 +9,22 @@
   max-width: 100%;
   border-radius: 0;
   overflow: hidden;
-  background: radial-gradient(
-    ellipse 90% 75% at 50% 35%,
-    rgba(32, 38, 58, 0.18) 0%,
-    rgba(12, 16, 32, 0.35) 50%,
-    rgba(4, 6, 14, 0.45) 100%
+  background: linear-gradient(
+    165deg,
+    rgba(255, 255, 255, 0.55) 0%,
+    rgba(244, 246, 252, 0.45) 100%
   );
-  box-shadow: none;
   touch-action: none;
+  cursor: grab;
+}
+
+.qr-stage-3d:active {
+  cursor: grabbing;
 }
 
 .qr-stage-3d__canvas {
+  position: relative;
+  z-index: 0;
   display: block;
   width: 100% !important;
   height: 100% !important;
