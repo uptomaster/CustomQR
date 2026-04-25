@@ -3,6 +3,8 @@
   --pr-a: linear-gradient(135deg, #e8a8bc 0%, #b896c4 100%);
   --pr-b: linear-gradient(135deg, #8ec5d8 0%, #5a8fae 100%);
   --pr-c: linear-gradient(135deg, #7c8c9a 0%, #3d4a5c 100%);
+  --u-accent: #e8a8bc;
+  --u-light: #fff7f8;
 
   position: relative;
   min-height: 100svh;
@@ -26,6 +28,61 @@
   );
   pointer-events: none;
   z-index: 0;
+}
+
+.shell__blob {
+  position: fixed;
+  border-radius: 50%;
+  filter: blur(58px);
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.5;
+}
+
+.shell__blob--1 {
+  width: min(42vmin, 280px);
+  height: min(42vmin, 280px);
+  top: 8%;
+  right: -8%;
+  background: radial-gradient(
+    circle,
+    color-mix(in srgb, var(--u-accent) 55%, transparent) 0%,
+    transparent 70%
+  );
+  animation: blob-a 20s ease-in-out infinite;
+}
+
+.shell__blob--2 {
+  width: min(38vmin, 240px);
+  height: min(38vmin, 240px);
+  bottom: 4%;
+  left: -12%;
+  background: radial-gradient(
+    circle,
+    rgba(130, 170, 230, 0.4) 0%,
+    transparent 68%
+  );
+  animation: blob-b 24s ease-in-out infinite;
+}
+
+@keyframes blob-a {
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+  50% {
+    transform: translate(-6%, 8%) scale(1.06);
+  }
+}
+
+@keyframes blob-b {
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+  50% {
+    transform: translate(10%, -5%) scale(1.08);
+  }
 }
 
 .shell__inner {
@@ -90,6 +147,11 @@
   border-color: rgba(120, 100, 180, 0.35);
   background: #fff;
   box-shadow: 0 0 0 3px rgba(150, 120, 200, 0.12);
+}
+
+.shell[data-has-qr='true'] .url-in:focus {
+  border-color: color-mix(in srgb, var(--u-accent) 55%, #888);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--u-accent) 16%, transparent);
 }
 
 .presets {
@@ -170,6 +232,15 @@
     0 0 0 1px rgba(255, 255, 255, 0.2) inset;
 }
 
+.shell[data-has-qr='true'] .view__rim {
+  background: linear-gradient(
+    150deg,
+    color-mix(in srgb, var(--u-light) 70%, #fff) 0%,
+    color-mix(in srgb, var(--u-accent) 22%, rgba(255, 255, 255, 0.3)) 55%,
+    rgba(255, 255, 255, 0.35) 100%
+  );
+}
+
 .view__halo {
   position: absolute;
   inset: -1px;
@@ -239,6 +310,12 @@
 .dl:hover {
   transform: scale(1.06);
   box-shadow: 0 6px 22px rgba(20, 10, 40, 0.2);
+}
+
+.shell[data-has-qr='true'] .dl:hover {
+  box-shadow:
+    0 8px 28px color-mix(in srgb, var(--u-accent) 22%, rgba(20, 10, 40, 0.12)),
+    inset 0 1px 0 #fff;
 }
 
 .dl:focus-visible {
