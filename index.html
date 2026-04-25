@@ -1,6 +1,14 @@
 <!doctype html>
 <html lang="ko">
   <head>
+    <script>
+      ;(function () {
+        var s = localStorage.getItem('customqr-season') || 'spring'
+        if (/^(spring|summer|autumn|winter)$/.test(s))
+          document.documentElement.dataset.season = s
+        else document.documentElement.dataset.season = 'spring'
+      })()
+    </script>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
