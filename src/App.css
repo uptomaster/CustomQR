@@ -138,7 +138,7 @@
   position: relative;
   z-index: 2;
   width: 100%;
-  max-width: 400px;
+  max-width: 448px;
   display: flex;
   flex-direction: column;
   gap: clamp(0.9rem, 2.4vw, 1.15rem);
@@ -391,8 +391,8 @@
   border-radius: 28px;
   background: radial-gradient(
     80% 60% at 50% 0%,
-    color-mix(in srgb, var(--u-accent) 38%, transparent) 0%,
-    transparent 58%
+    color-mix(in srgb, var(--u-accent) 18%, transparent) 0%,
+    transparent 52%
   );
   pointer-events: none;
   z-index: 0;
@@ -407,7 +407,7 @@
 }
 
 .view__sk {
-  min-height: 300px;
+  min-height: 340px;
   background: linear-gradient(
     110deg,
     rgba(255, 255, 255, 0.08) 0%,
@@ -508,114 +508,5 @@
   .pr {
     width: 1.25rem;
     height: 1.25rem;
-  }
-}
-
-/* Drop! — 더미가 찼을 때 */
-.drop-modal-root {
-  position: fixed;
-  inset: 0;
-  z-index: 80;
-  display: grid;
-  place-items: center;
-  padding: 1.25rem;
-  box-sizing: border-box;
-  pointer-events: auto;
-}
-
-.drop-modal-backdrop {
-  position: absolute;
-  inset: 0;
-  background: rgba(12, 14, 22, 0.42);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-}
-
-.drop-modal {
-  position: relative;
-  width: min(100%, 340px);
-  padding: 1.35rem 1.4rem 1.45rem;
-  border-radius: 20px;
-  background: linear-gradient(
-    165deg,
-    rgba(255, 255, 255, 0.96) 0%,
-    rgba(248, 246, 252, 0.94) 100%
-  );
-  border: 1px solid rgba(255, 255, 255, 0.55);
-  box-shadow:
-    0 24px 48px rgba(20, 18, 40, 0.18),
-    0 0 0 1px rgba(255, 255, 255, 0.35) inset;
-  text-align: center;
-}
-
-.drop-modal__title {
-  margin: 0 0 0.5rem;
-  font-size: 1.65rem;
-  font-weight: 700;
-  letter-spacing: -0.03em;
-  color: #141018;
-}
-
-.drop-modal__desc {
-  margin: 0 0 1.15rem;
-  font-size: 0.88rem;
-  line-height: 145%;
-  color: rgba(42, 38, 52, 0.72);
-}
-
-.drop-modal__action {
-  width: 100%;
-  margin: 0;
-  padding: 0.72rem 1rem;
-  border: none;
-  border-radius: 14px;
-  font-family: inherit;
-  font-size: 0.95rem;
-  font-weight: 650;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  cursor: pointer;
-  color: #fff;
-  background: linear-gradient(
-    145deg,
-    color-mix(in srgb, var(--u-accent, #b86a9a) 85%, #333) 0%,
-    color-mix(in srgb, var(--u-accent, #9050a0) 70%, #1a1520) 100%
-  );
-  box-shadow:
-    0 4px 16px color-mix(in srgb, var(--u-accent, #a070a8) 35%, transparent),
-    inset 0 1px 0 rgba(255, 255, 255, 0.25);
-  transition:
-    transform 0.18s ease,
-    box-shadow 0.18s ease;
-}
-
-.drop-modal__action:hover {
-  transform: translateY(-1px);
-  box-shadow:
-    0 8px 22px color-mix(in srgb, var(--u-accent, #a070a8) 40%, transparent),
-    inset 0 1px 0 rgba(255, 255, 255, 0.3);
-}
-
-.drop-modal__action:focus-visible {
-  outline: 2px solid color-mix(in srgb, var(--u-accent, #9078c8) 65%, #333);
-  outline-offset: 3px;
-}
-
-@media (prefers-color-scheme: dark) {
-  .drop-modal {
-    background: linear-gradient(
-      165deg,
-      rgba(38, 40, 52, 0.98) 0%,
-      rgba(28, 30, 40, 0.96) 100%
-    );
-    border-color: rgba(255, 255, 255, 0.1);
-  }
-
-  .drop-modal__title {
-    color: #f3f4f6;
-  }
-
-  .drop-modal__desc {
-    color: rgba(210, 210, 220, 0.75);
   }
 }
