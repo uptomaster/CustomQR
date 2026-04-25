@@ -1,6 +1,33 @@
-import { lazy, Suspense, useMemo, useState, type CSSProperties } from 'react'
-import { getQrResult, type QrEncodeResult } from './lib/qrMatrix'
+import {
+  lazy,
+  Suspense,
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+  useState,
+  type CSSProperties,
+} from 'react'
+import {
+  createEmptyBins,
+  createSettledPiece,
+  SettledDebrisLayer,
+  type SettledPiece,
+} from './components/SettledDebrisLayer'
+import { SeasonalLayer } from './components/SeasonalLayer'
+import { getQrResult, QR_ECC, type QrEncodeResult } from './lib/qrMatrix'
+import {
+  loadSeason,
+  saveSeason,
+  SEASONS,
+  type Season,
+} from './lib/season'
 import './App.css'
+
+/** 바닥 더미 최대 높이(뷰포트 비율), 이 안에서 쌓이면 Drop! */
+const PILE_VIEWPORT_RATIO = 0.4
+const PILE_TRIGGER_FRAC = 0.9
 
 const QrStage3D = lazy(async () => {
   const m = await import('./components/QrStage3D')
@@ -34,13 +61,100 @@ function DownloadIcon() {
 
 function App() {
   const [text, setText] = useState(PORTFOLIO_URL)
-  const qr = useMemo((): QrEncodeResult | null => getQrResult(text), [text])
+  const [season, setSeason] = useState<Season>(() => loadSeason())
+  const [settledPieces, setSettledPieces] = useState<SettledPiece[]>([])
+  const [dropModalOpen, setDropModalOpen] = useState(false)
+  const pileModalLatchRef = useRef(false)
+  const dropActionRef = useRef<HTMLButtonElement>(null)
+  const settledBinsRef = useRef<number[]>(createEmptyBins())
+  const settledSeqRef = useRef(0)
+
+  const qr = useMemo(
+    (): QrEncodeResult | null => getQrResult(text, QR_ECC, season),
+    [text, season],
+  )
+
+  useLayoutEffect(() => {
+    document.documentElement.dataset.season = season
+  }, [season])
+
+  useEffect(() => {
+    saveSeason(season)
+  }, [season])
+
+  useEffect(() => {
+    setSettledPieces([])
+    settledBinsRef.current = createEmptyBins()
+    settledSeqRef.current = 0
+    pileModalLatchRef.current = false
+    setDropModalOpen(false)
+  }, [season])
+
+  useEffect(() => {
+    if (dropModalOpen) return
+    if (typeof window === 'undefined') return
+
+    const tick = () => {
+      setSettledPieces((prev) => {
+        if (pileModalLatchRef.current) return prev
+
+        const bins = settledBinsRef.current
+        const b = Math.floor(Math.random() * bins.length)
+        const seq = settledSeqRef.current++
+        const bottom = bins[b]
+        const { piece, lift } = createSettledPiece(season, seq, b, bottom)
+        bins[b] = bottom + lift
+
+        const peak = Math.max(...bins)
+        const limit = Math.min(
+          window.innerHeight * PILE_VIEWPORT_RATIO,
+          520,
+        )
+        if (peak >= limit * PILE_TRIGGER_FRAC) {
+          if (!pileModalLatchRef.current) {
+            pileModalLatchRef.current = true
+            queueMicrotask(() => setDropModalOpen(true))
+          }
+        }
+
+        return [...prev, piece]
+      })
+    }
+
+    const id = window.setInterval(tick, 260)
+
+    return () => clearInterval(id)
+  }, [dropModalOpen, season])
+
+  const clearPileFromModal = useCallback(() => {
+    setSettledPieces([])
+    settledBinsRef.current = createEmptyBins()
+    settledSeqRef.current = 0
+    setDropModalOpen(false)
+    pileModalLatchRef.current = false
+  }, [])
+
+  useEffect(() => {
+    if (dropModalOpen) {
+      dropActionRef.current?.focus()
+    }
+  }, [dropModalOpen])
+
+  useEffect(() => {
+    if (!dropModalOpen) return
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') clearPileFromModal()
+    }
+    document.addEventListener('keydown', onKey)
+    return () => document.removeEventListener('keydown', onKey)
+  }, [dropModalOpen, clearPileFromModal])
 
   const themeStyle =
     qr != null
       ? ({
           ['--u-accent' as string]: qr.palette.accent,
           ['--u-light' as string]: qr.palette.light,
+          ['--u-dark' as string]: qr.palette.dark,
         } as CSSProperties)
       : undefined
 
@@ -48,13 +162,35 @@ function App() {
     <div
       className="shell"
       data-has-qr={Boolean(qr)}
+      data-season={season}
       style={themeStyle}
     >
+      <SettledDebrisLayer season={season} pieces={settledPieces} />
+      <SeasonalLayer season={season} />
       <div className="shell__glow" aria-hidden />
       <div className="shell__blob shell__blob--1" aria-hidden />
       <div className="shell__blob shell__blob--2" aria-hidden />
       <div className="shell__inner">
         <div className="composer">
+          <div
+            className="season-row"
+            role="group"
+            aria-label="Background season"
+          >
+            {SEASONS.map((s) => (
+              <button
+                key={s.id}
+                type="button"
+                className={`season-chip${season === s.id ? ' season-chip--on' : ''}`}
+                onClick={() => setSeason(s.id)}
+                aria-pressed={season === s.id}
+                aria-label={s.a11y}
+                title={s.a11y}
+              >
+                {s.label}
+              </button>
+            ))}
+          </div>
           <input
             className="url-in"
             type="url"
@@ -113,6 +249,38 @@ function App() {
           </div>
         )}
       </div>
+
+      {dropModalOpen ? (
+        <div className="drop-modal-root" role="presentation">
+          <div
+            className="drop-modal-backdrop"
+            aria-hidden
+            onClick={clearPileFromModal}
+          />
+          <div
+            className="drop-modal"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="drop-modal-title"
+            aria-describedby="drop-modal-desc"
+          >
+            <h2 id="drop-modal-title" className="drop-modal__title">
+              Drop!
+            </h2>
+            <p id="drop-modal-desc" className="drop-modal__desc">
+              쌓인 게 QR 쪽까지 차올랐어요. 비우고 다시 쌓을까요?
+            </p>
+            <button
+              ref={dropActionRef}
+              type="button"
+              className="drop-modal__action"
+              onClick={clearPileFromModal}
+            >
+              Drop!
+            </button>
+          </div>
+        </div>
+      ) : null}
     </div>
   )
 }
