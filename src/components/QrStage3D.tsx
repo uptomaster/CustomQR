@@ -7,6 +7,16 @@ import './QrStage3D.css'
 
 const L = THREE.MathUtils.lerp
 
+function colorFromCss(s: string): THREE.Color {
+  const c = new THREE.Color()
+  try {
+    c.setStyle(s)
+  } catch {
+    c.set('#888888')
+  }
+  return c
+}
+
 type QrBlockProps = {
   dataUrl: string
   palette: CloudQrPalette
@@ -22,17 +32,17 @@ function QrBlock({ dataUrl, palette }: QrBlockProps) {
 
   const materials = useMemo(() => {
     const side = new THREE.MeshStandardMaterial({
-      color: new THREE.Color(palette.dark),
+      color: colorFromCss(palette.dark),
       roughness: 0.4,
       metalness: 0.12,
     })
     const topBottom = new THREE.MeshStandardMaterial({
-      color: new THREE.Color(palette.accent),
+      color: colorFromCss(palette.accent),
       roughness: 0.35,
       metalness: 0.12,
     })
     const back = new THREE.MeshStandardMaterial({
-      color: new THREE.Color(palette.light),
+      color: colorFromCss(palette.light),
       roughness: 0.5,
     })
     const front = new THREE.MeshPhysicalMaterial({
@@ -69,15 +79,23 @@ function QrBlock({ dataUrl, palette }: QrBlockProps) {
 type QrSceneProps = QrBlockProps
 
 function QrScene({ dataUrl, palette }: QrSceneProps) {
+  const { keyRgb, rimRgb } = useMemo(() => {
+    const Lc = colorFromCss(palette.light)
+    const Ac = colorFromCss(palette.accent)
+    const key = Lc.clone().lerp(new THREE.Color(1, 1, 1), 0.38)
+    const rim = Ac.clone().lerp(Lc, 0.22)
+    return { keyRgb: key, rimRgb: rim }
+  }, [palette.light, palette.accent])
+
   return (
     <>
-      <ambientLight intensity={0.55} />
+      <ambientLight intensity={0.52} color={colorFromCss(palette.light)} />
       <directionalLight
         position={[2.2, 3.5, 2.8]}
-        intensity={0.9}
-        color="#fff4f0"
+        intensity={0.92}
+        color={keyRgb}
       />
-      <pointLight position={[-1.2, 0.4, 1.4]} intensity={0.25} color="#e8b8c8" />
+      <pointLight position={[-1.2, 0.4, 1.4]} intensity={0.38} color={rimRgb} />
       <Suspense fallback={null}>
         <Float
           floatIntensity={0.4}
