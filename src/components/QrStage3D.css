@@ -3,9 +3,9 @@
 .qr-stage-3d {
   position: relative;
   width: 100%;
-  min-height: 300px;
-  max-height: min(400px, 50vh);
-  height: 44vw;
+  min-height: 340px;
+  max-height: min(480px, 58vh);
+  height: 52vw;
   max-width: 100%;
   border-radius: 0;
   overflow: hidden;
@@ -16,6 +16,52 @@
   );
   touch-action: none;
   cursor: grab;
+}
+
+.qr-stage-3d__viewmode {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 4;
+  margin: 0;
+  padding: 0.32rem 0.55rem;
+  border: 1px solid rgba(255, 255, 255, 0.42);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.72);
+  color: rgba(36, 32, 48, 0.82);
+  font-family: inherit;
+  font-size: 0.62rem;
+  font-weight: 650;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  cursor: pointer;
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.55) inset;
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease,
+    color 0.2s ease;
+}
+
+.qr-stage-3d__viewmode:hover {
+  background: rgba(255, 255, 255, 0.88);
+  border-color: rgba(255, 255, 255, 0.55);
+}
+
+.qr-stage-3d__viewmode[aria-pressed='true'] {
+  background: color-mix(in srgb, var(--u-accent, #e8a8bc) 22%, rgba(255, 255, 255, 0.85));
+  border-color: color-mix(in srgb, var(--u-accent, #c898b0) 40%, rgba(255, 255, 255, 0.5));
+}
+
+@media (prefers-color-scheme: dark) {
+  .qr-stage-3d__viewmode {
+    background: rgba(28, 32, 44, 0.72);
+    border-color: rgba(255, 255, 255, 0.14);
+    color: rgba(236, 234, 246, 0.9);
+  }
+
+  .qr-stage-3d__viewmode:hover {
+    background: rgba(38, 42, 56, 0.88);
+  }
 }
 
 .qr-stage-3d:active {
@@ -33,6 +79,6 @@
 
 @media (min-width: 480px) {
   .qr-stage-3d {
-    height: 360px;
+    height: 420px;
   }
 }
