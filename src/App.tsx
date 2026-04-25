@@ -1,17 +1,19 @@
 import {
   lazy,
   Suspense,
-  useCallback,
   useEffect,
   useLayoutEffect,
   useMemo,
-  useRef,
   useState,
   type CSSProperties,
 } from 'react'
-import { SettledDebrisLayer } from './components/SettledDebrisLayer'
 import { SeasonalLayer } from './components/SeasonalLayer'
-import { getQrResult, QR_ECC, type QrEncodeResult } from './lib/qrMatrix'
+import {
+  getQrMatrix,
+  getQrResult,
+  QR_ECC,
+  type QrEncodeResult,
+} from './lib/qrMatrix'
 import {
   loadSeason,
   saveSeason,
@@ -19,10 +21,6 @@ import {
   type Season,
 } from './lib/season'
 import './App.css'
-
-/** 바닥 더미 최대 높이(뷰포트 비율), 이 안에서 쌓이면 Drop! */
-const PILE_VIEWPORT_RATIO = 0.4
-const PILE_TRIGGER_FRAC = 0.9
 
 const QrStage3D = lazy(async () => {
   const m = await import('./components/QrStage3D')
@@ -57,23 +55,17 @@ function DownloadIcon() {
 function App() {
   const [text, setText] = useState(PORTFOLIO_URL)
   const [season, setSeason] = useState<Season>(() => loadSeason())
-  const [pileFill, setPileFill] = useState(0)
-  const [dropModalOpen, setDropModalOpen] = useState(false)
-  const pileModalLatchRef = useRef(false)
-  const dropActionRef = useRef<HTMLButtonElement>(null)
 
-  const pileLimitPx = useMemo(
-    () =>
-      typeof window !== 'undefined'
-        ? Math.min(window.innerHeight * PILE_VIEWPORT_RATIO, 520)
-        : 400,
-    [],
-  )
-
-  const qr = useMemo(
-    (): QrEncodeResult | null => getQrResult(text, QR_ECC, season),
-    [text, season],
-  )
+  /** URL만으로 결정 — 계절 바꿔도 동일 격자(3D/평면 공통) */
+  const qrMatrix = useMemo(() => getQrMatrix(text, QR_ECC), [text])
+  const qr = useMemo((): QrEncodeResult | null => {
+    const row = getQrResult(text, QR_ECC, season)
+    if (!row) return null
+    const n = row.moduleCount
+    const stable =
+      qrMatrix.length === n && qrMatrix[0]?.length === n ? qrMatrix : row.matrix
+    return { ...row, matrix: stable }
+  }, [text, season, qrMatrix])
 
   useLayoutEffect(() => {
     document.documentElement.dataset.season = season
@@ -82,55 +74,6 @@ function App() {
   useEffect(() => {
     saveSeason(season)
   }, [season])
-
-  useEffect(() => {
-    setPileFill(0)
-    pileModalLatchRef.current = false
-    setDropModalOpen(false)
-  }, [season])
-
-  useEffect(() => {
-    if (dropModalOpen) return
-    if (typeof window === 'undefined') return
-
-    const id = window.setInterval(() => {
-      setPileFill((f) => {
-        if (pileModalLatchRef.current) return f
-        const n = Math.min(1, f + 0.0038 + Math.random() * 0.0022)
-        if (n >= PILE_TRIGGER_FRAC) {
-          if (!pileModalLatchRef.current) {
-            pileModalLatchRef.current = true
-            queueMicrotask(() => setDropModalOpen(true))
-          }
-          return PILE_TRIGGER_FRAC
-        }
-        return n
-      })
-    }, 420)
-
-    return () => clearInterval(id)
-  }, [dropModalOpen, season])
-
-  const clearPileFromModal = useCallback(() => {
-    setPileFill(0)
-    setDropModalOpen(false)
-    pileModalLatchRef.current = false
-  }, [])
-
-  useEffect(() => {
-    if (dropModalOpen) {
-      dropActionRef.current?.focus()
-    }
-  }, [dropModalOpen])
-
-  useEffect(() => {
-    if (!dropModalOpen) return
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') clearPileFromModal()
-    }
-    document.addEventListener('keydown', onKey)
-    return () => document.removeEventListener('keydown', onKey)
-  }, [dropModalOpen, clearPileFromModal])
 
   const themeStyle =
     qr != null
@@ -148,11 +91,6 @@ function App() {
       data-season={season}
       style={themeStyle}
     >
-      <SettledDebrisLayer
-        season={season}
-        fill={pileFill}
-        limitPx={pileLimitPx}
-      />
       <SeasonalLayer season={season} />
       <div className="shell__glow" aria-hidden />
       <div className="shell__blob shell__blob--1" aria-hidden />
@@ -216,6 +154,8 @@ function App() {
                     key={qr.dataUrl}
                     dataUrl={qr.dataUrl}
                     palette={qr.palette}
+                    season={season}
+                    matrix={qr.matrix}
                   />
                 </Suspense>
                 <a
@@ -236,38 +176,6 @@ function App() {
           </div>
         )}
       </div>
-
-      {dropModalOpen ? (
-        <div className="drop-modal-root" role="presentation">
-          <div
-            className="drop-modal-backdrop"
-            aria-hidden
-            onClick={clearPileFromModal}
-          />
-          <div
-            className="drop-modal"
-            role="dialog"
-            aria-modal="true"
-            aria-labelledby="drop-modal-title"
-            aria-describedby="drop-modal-desc"
-          >
-            <h2 id="drop-modal-title" className="drop-modal__title">
-              Drop!
-            </h2>
-            <p id="drop-modal-desc" className="drop-modal__desc">
-              쌓인 게 QR 쪽까지 차올랐어요. 비우고 다시 쌓을까요?
-            </p>
-            <button
-              ref={dropActionRef}
-              type="button"
-              className="drop-modal__action"
-              onClick={clearPileFromModal}
-            >
-              Drop!
-            </button>
-          </div>
-        </div>
-      ) : null}
     </div>
   )
 }
