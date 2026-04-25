@@ -23,14 +23,17 @@ type P = {
 const BASE = 34
 const SUB = 44
 
+/** 낙하·흔들림 애니메이션 속도 배율 (>1이면 더 느림) */
+const FALL_SLOW = 2.15
+
 function makeItems(season: Season): P[] {
   const m =
-    season === 'winter'
+    (season === 'winter'
       ? 1.35
       : season === 'summer'
         ? 0.95
-        : 1
-  const subM = season === 'winter' ? 1.2 : 1
+        : 1) * FALL_SLOW
+  const subM = (season === 'winter' ? 1.2 : 1) * FALL_SLOW
 
   const main: P[] = Array.from({ length: season === 'winter' ? 28 : BASE }, (_, i) => {
     const rL = frac01(season, 'main', i, 1)
