@@ -1,18 +1,19 @@
-import { Canvas, useFrame } from '@react-three/fiber'
-import { ContactShadows, OrbitControls, useTexture } from '@react-three/drei'
+import { Canvas, useFrame, useThree } from '@react-three/fiber'
+import { ContactShadows, Float, OrbitControls, useTexture } from '@react-three/drei'
 import { Suspense, useMemo, useRef } from 'react'
 import * as THREE from 'three'
 import type { CloudQrPalette } from '../lib/qrMatrix'
 import './QrStage3D.css'
+
+const L = THREE.MathUtils.lerp
 
 type QrBlockProps = {
   dataUrl: string
   palette: CloudQrPalette
 }
 
-/** 얇은 박스: 앞면만 QR 텍스처, 나머지는 팔레트(벚꽃·나무 톤) */
 function QrBlock({ dataUrl, palette }: QrBlockProps) {
-  const group = useRef<THREE.Group>(null)
+  const tilt = useRef<THREE.Group>(null)
   const tex = useTexture(dataUrl, (t) => {
     t.magFilter = THREE.NearestFilter
     t.minFilter = THREE.NearestFilter
@@ -22,37 +23,42 @@ function QrBlock({ dataUrl, palette }: QrBlockProps) {
   const materials = useMemo(() => {
     const side = new THREE.MeshStandardMaterial({
       color: new THREE.Color(palette.dark),
-      roughness: 0.45,
-      metalness: 0.1,
+      roughness: 0.4,
+      metalness: 0.12,
     })
     const topBottom = new THREE.MeshStandardMaterial({
       color: new THREE.Color(palette.accent),
-      roughness: 0.4,
-      metalness: 0.1,
+      roughness: 0.35,
+      metalness: 0.12,
     })
     const back = new THREE.MeshStandardMaterial({
       color: new THREE.Color(palette.light),
       roughness: 0.5,
     })
-    const front = new THREE.MeshStandardMaterial({
+    const front = new THREE.MeshPhysicalMaterial({
       map: tex,
-      roughness: 0.22,
+      roughness: 0.2,
       metalness: 0.04,
+      clearcoat: 0.1,
+      clearcoatRoughness: 0.4,
     })
-    // three.js Box: px, nx, py, ny, pz(카메라 쪽 +Z), nz
     return [side, side, topBottom, topBottom, front, back]
   }, [tex, palette.dark, palette.light, palette.accent])
 
-  useFrame((st) => {
-    const g = group.current
+  const { pointer, clock } = useThree()
+
+  useFrame(() => {
+    const g = tilt.current
     if (!g) return
-    const t = st.clock.elapsedTime
-    g.rotation.y = Math.sin(t * 0.35) * 0.1
-    g.rotation.x = Math.cos(t * 0.28) * 0.05
+    const t = clock.elapsedTime
+    const targetY = pointer.x * 0.4 + Math.sin(t * 0.2) * 0.035
+    const targetX = -pointer.y * 0.28 + Math.cos(t * 0.16) * 0.022
+    g.rotation.y = L(g.rotation.y, targetY, 0.1)
+    g.rotation.x = L(g.rotation.x, targetX, 0.1)
   })
 
   return (
-    <group ref={group} position={[0, 0, 0]}>
+    <group ref={tilt}>
       <mesh material={materials}>
         <boxGeometry args={[2, 2, 0.2]} />
       </mesh>
@@ -65,34 +71,38 @@ type QrSceneProps = QrBlockProps
 function QrScene({ dataUrl, palette }: QrSceneProps) {
   return (
     <>
-      <ambientLight intensity={0.58} />
+      <ambientLight intensity={0.55} />
       <directionalLight
-        position={[2.5, 4, 3]}
-        intensity={0.95}
-        color="#fff5f0"
+        position={[2.2, 3.5, 2.8]}
+        intensity={0.9}
+        color="#fff4f0"
       />
-      <pointLight
-        position={[-2.2, 1.2, 1.5]}
-        intensity={0.45}
-        color="#ffc8d8"
-      />
+      <pointLight position={[-1.2, 0.4, 1.4]} intensity={0.25} color="#e8b8c8" />
       <Suspense fallback={null}>
-        <QrBlock dataUrl={dataUrl} palette={palette} />
+        <Float
+          floatIntensity={0.4}
+          rotationIntensity={0.12}
+          speed={1.2}
+        >
+          <QrBlock dataUrl={dataUrl} palette={palette} />
+        </Float>
         <ContactShadows
           position={[0, -1.02, 0]}
-          opacity={0.5}
-          scale={9}
+          opacity={0.45}
+          scale={8}
           blur={2.4}
-          far={2.2}
+          far={2}
         />
       </Suspense>
       <OrbitControls
         makeDefault
         enableDamping
         dampingFactor={0.08}
-        minDistance={2.4}
-        maxDistance={5.8}
-        minPolarAngle={0.2}
+        autoRotate
+        autoRotateSpeed={0.28}
+        minDistance={2.2}
+        maxDistance={5.5}
+        minPolarAngle={0.12}
         maxPolarAngle={Math.PI * 0.5}
       />
     </>
@@ -104,7 +114,6 @@ type Props = {
   palette: CloudQrPalette
 }
 
-/** WebGL 3D 미리보기(앞면 = 도트 QR). 다운로드 PNG는 2D 평면이며 스캔용. */
 export function QrStage3D({ dataUrl, palette }: Props) {
   return (
     <div
