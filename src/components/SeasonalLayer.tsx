@@ -20,8 +20,8 @@ type P = {
   path: 0 | 1 | 2 | 3
 }
 
-const BASE = 56
-const SUB = 64
+const BASE = 34
+const SUB = 44
 
 function makeItems(season: Season): P[] {
   const m =
@@ -32,7 +32,7 @@ function makeItems(season: Season): P[] {
         : 1
   const subM = season === 'winter' ? 1.2 : 1
 
-  const main: P[] = Array.from({ length: season === 'winter' ? 50 : BASE }, (_, i) => {
+  const main: P[] = Array.from({ length: season === 'winter' ? 28 : BASE }, (_, i) => {
     const rL = frac01(season, 'main', i, 1)
     const rD = frac01(season, 'main', i, 2)
     const rSd = frac01(season, 'main', i, 3)
@@ -65,7 +65,7 @@ function makeItems(season: Season): P[] {
   })
 
   const sub: P[] = Array.from(
-    { length: season === 'winter' ? 90 : SUB },
+    { length: season === 'winter' ? 52 : SUB },
     (_, i) => {
       const rL = frac01(season, 'sub', i, 11)
       const rD = frac01(season, 'sub', i, 12)

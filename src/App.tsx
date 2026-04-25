@@ -9,12 +9,7 @@ import {
   useState,
   type CSSProperties,
 } from 'react'
-import {
-  createEmptyBins,
-  createSettledPiece,
-  SettledDebrisLayer,
-  type SettledPiece,
-} from './components/SettledDebrisLayer'
+import { SettledDebrisLayer } from './components/SettledDebrisLayer'
 import { SeasonalLayer } from './components/SeasonalLayer'
 import { getQrResult, QR_ECC, type QrEncodeResult } from './lib/qrMatrix'
 import {
@@ -62,12 +57,18 @@ function DownloadIcon() {
 function App() {
   const [text, setText] = useState(PORTFOLIO_URL)
   const [season, setSeason] = useState<Season>(() => loadSeason())
-  const [settledPieces, setSettledPieces] = useState<SettledPiece[]>([])
+  const [pileFill, setPileFill] = useState(0)
   const [dropModalOpen, setDropModalOpen] = useState(false)
   const pileModalLatchRef = useRef(false)
   const dropActionRef = useRef<HTMLButtonElement>(null)
-  const settledBinsRef = useRef<number[]>(createEmptyBins())
-  const settledSeqRef = useRef(0)
+
+  const pileLimitPx = useMemo(
+    () =>
+      typeof window !== 'undefined'
+        ? Math.min(window.innerHeight * PILE_VIEWPORT_RATIO, 520)
+        : 400,
+    [],
+  )
 
   const qr = useMemo(
     (): QrEncodeResult | null => getQrResult(text, QR_ECC, season),
@@ -83,9 +84,7 @@ function App() {
   }, [season])
 
   useEffect(() => {
-    setSettledPieces([])
-    settledBinsRef.current = createEmptyBins()
-    settledSeqRef.current = 0
+    setPileFill(0)
     pileModalLatchRef.current = false
     setDropModalOpen(false)
   }, [season])
@@ -94,42 +93,26 @@ function App() {
     if (dropModalOpen) return
     if (typeof window === 'undefined') return
 
-    const tick = () => {
-      setSettledPieces((prev) => {
-        if (pileModalLatchRef.current) return prev
-
-        const bins = settledBinsRef.current
-        const b = Math.floor(Math.random() * bins.length)
-        const seq = settledSeqRef.current++
-        const bottom = bins[b]
-        const { piece, lift } = createSettledPiece(season, seq, b, bottom)
-        bins[b] = bottom + lift
-
-        const peak = Math.max(...bins)
-        const limit = Math.min(
-          window.innerHeight * PILE_VIEWPORT_RATIO,
-          520,
-        )
-        if (peak >= limit * PILE_TRIGGER_FRAC) {
+    const id = window.setInterval(() => {
+      setPileFill((f) => {
+        if (pileModalLatchRef.current) return f
+        const n = Math.min(1, f + 0.0038 + Math.random() * 0.0022)
+        if (n >= PILE_TRIGGER_FRAC) {
           if (!pileModalLatchRef.current) {
             pileModalLatchRef.current = true
             queueMicrotask(() => setDropModalOpen(true))
           }
+          return PILE_TRIGGER_FRAC
         }
-
-        return [...prev, piece]
+        return n
       })
-    }
-
-    const id = window.setInterval(tick, 260)
+    }, 420)
 
     return () => clearInterval(id)
   }, [dropModalOpen, season])
 
   const clearPileFromModal = useCallback(() => {
-    setSettledPieces([])
-    settledBinsRef.current = createEmptyBins()
-    settledSeqRef.current = 0
+    setPileFill(0)
     setDropModalOpen(false)
     pileModalLatchRef.current = false
   }, [])
@@ -165,7 +148,11 @@ function App() {
       data-season={season}
       style={themeStyle}
     >
-      <SettledDebrisLayer season={season} pieces={settledPieces} />
+      <SettledDebrisLayer
+        season={season}
+        fill={pileFill}
+        limitPx={pileLimitPx}
+      />
       <SeasonalLayer season={season} />
       <div className="shell__glow" aria-hidden />
       <div className="shell__blob shell__blob--1" aria-hidden />

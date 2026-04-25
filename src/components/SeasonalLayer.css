@@ -5,14 +5,14 @@
   z-index: 2;
   overflow: hidden;
   pointer-events: none;
-  contain: layout style paint;
+  contain: layout;
 }
 
 /* 레이아웃·모션 공통 (색·형태는 시즌별) */
 .seasonal-layer .seasonal__a,
 .seasonal-layer .seasonal__b {
   position: absolute;
-  will-change: transform, opacity;
+  will-change: transform;
 }
 
 /* ===== 봄: 벚꽃 잎(오목한 끝·하이라이트·주맥) ===== */
@@ -35,10 +35,7 @@
     radial-gradient(ellipse 72% 40% at 28% 20%, rgba(255, 255, 255, 0.92) 0%, transparent 54%),
     radial-gradient(ellipse 50% 35% at 74% 36%, rgba(255, 210, 225, 0.55) 0%, transparent 50%),
     linear-gradient(162deg, #fff2f7 0%, #ff9eb8 36%, #ff5e8a 66%, #ffeef5 100%);
-  box-shadow: none;
-  filter:
-    drop-shadow(0 1px 2px rgba(160, 50, 90, 0.2))
-    drop-shadow(0 0 5px rgba(255, 150, 185, 0.38));
+  box-shadow: 0 1px 2px rgba(160, 50, 90, 0.1);
 }
 
 .seasonal-layer[data-season='spring'] .seasonal__a.path--1,
@@ -57,23 +54,6 @@
   );
 }
 
-.seasonal-layer[data-season='spring'] .seasonal__a::after {
-  content: '';
-  position: absolute;
-  left: 46%;
-  top: 20%;
-  width: 9%;
-  height: 54%;
-  background: linear-gradient(
-    180deg,
-    rgba(190, 60, 95, 0) 0%,
-    rgba(185, 55, 90, 0.28) 48%,
-    rgba(175, 50, 85, 0.1) 100%
-  );
-  border-radius: 50%;
-  pointer-events: none;
-}
-
 .seasonal-layer[data-season='spring'] .seasonal__b {
   top: -4%;
   border-radius: 0;
@@ -90,28 +70,7 @@
   background:
     radial-gradient(ellipse 75% 42% at 30% 22%, rgba(255, 255, 255, 0.85) 0%, transparent 52%),
     linear-gradient(158deg, #ffe8f0 0%, #ff7a9c 50%, #ffd6e5 100%);
-  box-shadow: none;
-  filter:
-    drop-shadow(0 1px 2px rgba(180, 60, 100, 0.22))
-    drop-shadow(0 0 3px rgba(255, 130, 165, 0.42));
-}
-
-.seasonal-layer[data-season='spring'] .seasonal__b::after {
-  content: '';
-  position: absolute;
-  left: 45%;
-  top: 24%;
-  width: 11%;
-  height: 48%;
-  background: linear-gradient(
-    180deg,
-    rgba(180, 55, 90, 0) 0%,
-    rgba(175, 55, 88, 0.22) 50%,
-    transparent 100%
-  );
-  border-radius: 50%;
-  pointer-events: none;
-  opacity: 0.85;
+  box-shadow: 0 1px 2px rgba(180, 60, 100, 0.1);
 }
 
 /* ===== 여름: 잎 실루엣 + 중앙·측맥 ===== */
@@ -129,8 +88,7 @@
   background:
     radial-gradient(ellipse 88% 58% at 40% 36%, rgba(210, 248, 210, 0.55) 0%, transparent 52%),
     linear-gradient(118deg, #daf2d0 0%, #4fa86a 44%, #1a5a32 74%, #8fd4a0 100%);
-  box-shadow: none;
-  filter: drop-shadow(0 2px 4px rgba(25, 85, 45, 0.28));
+  box-shadow: 0 1px 2px rgba(25, 85, 45, 0.12);
 }
 
 .seasonal-layer[data-season='summer'] .seasonal__a.path--1,
@@ -145,17 +103,6 @@
   );
 }
 
-.seasonal-layer[data-season='summer'] .seasonal__a::after {
-  content: '';
-  position: absolute;
-  inset: 14% 20% 16% 20%;
-  background:
-    linear-gradient(90deg, transparent 46%, rgba(25, 95, 50, 0.38) 50%, transparent 54%),
-    linear-gradient(128deg, transparent 42%, rgba(25, 95, 50, 0.14) 50%, transparent 58%),
-    linear-gradient(52deg, transparent 42%, rgba(25, 95, 50, 0.14) 50%, transparent 58%);
-  pointer-events: none;
-}
-
 .seasonal-layer[data-season='summer'] .seasonal__b {
   top: -4%;
   border-radius: 0;
@@ -168,21 +115,7 @@
   background:
     radial-gradient(ellipse 95% 60% at 38% 38%, rgba(220, 250, 220, 0.45) 0%, transparent 50%),
     linear-gradient(125deg, #e8f8e0 0%, #5cb86e 52%, #2d7a42 100%);
-  box-shadow: none;
-  filter: drop-shadow(0 1px 3px rgba(35, 110, 55, 0.26));
-}
-
-.seasonal-layer[data-season='summer'] .seasonal__b::after {
-  content: '';
-  position: absolute;
-  inset: 18% 28% 22% 28%;
-  background: linear-gradient(
-    90deg,
-    transparent 45%,
-    rgba(30, 100, 55, 0.32) 50%,
-    transparent 55%
-  );
-  pointer-events: none;
+  box-shadow: 0 1px 2px rgba(35, 110, 55, 0.1);
 }
 
 /* ===== 가을: 단풍 실루엣 + 톤별 그라데이션 ===== */
@@ -258,75 +191,36 @@
   background:
     radial-gradient(ellipse 55% 40% at 32% 28%, rgba(255, 230, 200, 0.65) 0%, transparent 52%),
     linear-gradient(128deg, #ffe4c4 0%, #ea580c 42%, #7c2d12 100%);
-  box-shadow: none;
-  filter: drop-shadow(0 2px 3px rgba(140, 50, 10, 0.28));
+  box-shadow: 0 1px 2px rgba(140, 50, 10, 0.12);
 }
 
 .seasonal-layer[data-season='autumn'] .seasonal__a.seasonal__tone--1 {
   background:
     radial-gradient(ellipse 50% 38% at 35% 30%, rgba(255, 248, 200, 0.6) 0%, transparent 50%),
     linear-gradient(122deg, #fef3c7 0%, #ca8a04 48%, #713f12 100%);
-  box-shadow: none;
-  filter: drop-shadow(0 2px 3px rgba(120, 70, 0, 0.26));
+  box-shadow: 0 1px 2px rgba(120, 70, 0, 0.12);
 }
 
 .seasonal-layer[data-season='autumn'] .seasonal__a.seasonal__tone--2 {
   background:
     radial-gradient(ellipse 52% 40% at 30% 26%, rgba(255, 220, 225, 0.55) 0%, transparent 50%),
     linear-gradient(132deg, #fecdd3 0%, #b91c1c 45%, #450a0a 100%);
-  box-shadow: none;
-  filter: drop-shadow(0 2px 4px rgba(100, 20, 30, 0.3));
+  box-shadow: 0 1px 2px rgba(100, 20, 30, 0.12);
 }
 
 .seasonal-layer[data-season='autumn'] .seasonal__b.seasonal__tone--0 {
   background: linear-gradient(155deg, #ffedd5, #c2410c);
-  filter: drop-shadow(0 1px 2px rgba(160, 55, 10, 0.25));
+  box-shadow: 0 1px 2px rgba(160, 55, 10, 0.1);
 }
 
 .seasonal-layer[data-season='autumn'] .seasonal__b.seasonal__tone--1 {
   background: linear-gradient(155deg, #fef3c7, #b45309);
-  filter: drop-shadow(0 1px 2px rgba(130, 75, 0, 0.24));
+  box-shadow: 0 1px 2px rgba(130, 75, 0, 0.1);
 }
 
 .seasonal-layer[data-season='autumn'] .seasonal__b.seasonal__tone--2 {
   background: linear-gradient(155deg, #fecdd3, #9f1239);
-  filter: drop-shadow(0 1px 2px rgba(120, 30, 50, 0.26));
-}
-
-.seasonal-layer[data-season='autumn'] .seasonal__a::after {
-  content: '';
-  position: absolute;
-  inset: 22% 38% 28% 38%;
-  background: linear-gradient(
-    90deg,
-    transparent 46%,
-    rgba(80, 35, 10, 0.22) 50%,
-    transparent 54%
-  );
-  pointer-events: none;
-}
-
-.seasonal-layer[data-season='autumn'] .seasonal__a.seasonal__tone--2::after {
-  background: linear-gradient(
-    90deg,
-    transparent 46%,
-    rgba(60, 10, 15, 0.25) 50%,
-    transparent 54%
-  );
-}
-
-.seasonal-layer[data-season='autumn'] .seasonal__b::after {
-  content: '';
-  position: absolute;
-  inset: 26% 40% 32% 40%;
-  background: linear-gradient(
-    90deg,
-    transparent 44%,
-    rgba(90, 40, 12, 0.2) 50%,
-    transparent 56%
-  );
-  pointer-events: none;
-  opacity: 0.85;
+  box-shadow: 0 1px 2px rgba(120, 30, 50, 0.1);
 }
 
 /* ===== 겨울: 육·팔각 눈 결정 + 굴절 하이라이트 ===== */
@@ -356,9 +250,7 @@
     radial-gradient(circle at 32% 28%, rgba(255, 255, 255, 0.98) 0%, transparent 38%),
     radial-gradient(circle at 70% 62%, rgba(220, 235, 255, 0.65) 0%, transparent 36%),
     linear-gradient(148deg, #ffffff 0%, #d0e0f5 45%, #eef6ff 100%);
-  filter:
-    drop-shadow(0 0 3px rgba(255, 255, 255, 0.95))
-    drop-shadow(0 0 8px rgba(180, 210, 255, 0.45));
+  box-shadow: 0 1px 3px rgba(160, 190, 230, 0.25);
 }
 
 .seasonal-layer[data-season='winter'] .seasonal__a.path--1,
@@ -386,9 +278,7 @@
       rgba(190, 210, 245, 0.4) 315deg,
       rgba(255, 255, 255, 0.98) 360deg
     );
-  filter:
-    drop-shadow(0 0 2px rgba(255, 255, 255, 0.9))
-    drop-shadow(0 0 7px rgba(170, 200, 255, 0.42));
+  box-shadow: 0 1px 3px rgba(150, 185, 230, 0.22);
 }
 
 .seasonal-layer[data-season='winter'] .seasonal__b {
@@ -416,9 +306,7 @@
   background:
     radial-gradient(circle at 35% 30%, #fff 0%, transparent 40%),
     linear-gradient(155deg, #ffffff 0%, #d8e6f8 55%, #f2f8ff 100%);
-  filter:
-    drop-shadow(0 0 2px rgba(255, 255, 255, 0.88))
-    drop-shadow(0 0 5px rgba(190, 215, 255, 0.38));
+  box-shadow: 0 1px 2px rgba(170, 200, 240, 0.2);
 }
 
 .seasonal-layer[data-season='winter'] .seasonal__b.path--1,
@@ -436,9 +324,7 @@
   background:
     radial-gradient(circle at 40% 35%, rgba(255, 255, 255, 0.95) 0%, transparent 42%),
     linear-gradient(135deg, #f8fbff 0%, #c8daf0 50%, #e8f2fc 100%);
-  filter:
-    drop-shadow(0 0 2px rgba(255, 255, 255, 0.85))
-    drop-shadow(0 0 5px rgba(180, 205, 255, 0.35));
+  box-shadow: 0 1px 2px rgba(160, 195, 235, 0.2);
 }
 
 /* —— 낙하(중력 느낌): 세로는 고정 비율, 가로·회전은 스웨이가 맡음 —— */
