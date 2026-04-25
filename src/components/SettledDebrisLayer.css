@@ -1,0 +1,21 @@
+/* seasonal-layer와 병행: SeasonalLayer.css의 [data-season] 잎/눈 스타일이 적용되도록 함 */
+.seasonal-layer.settled-debris {
+  z-index: 1;
+  pointer-events: none;
+}
+
+.seasonal-layer.settled-debris .seasonal__a,
+.seasonal-layer.settled-debris .seasonal__b {
+  animation: none !important;
+  top: auto !important;
+  opacity: 0.94;
+  transform-origin: center bottom;
+  filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.08));
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .seasonal-layer.settled-debris .seasonal__a,
+  .seasonal-layer.settled-debris .seasonal__b {
+    opacity: 0.55;
+  }
+}
