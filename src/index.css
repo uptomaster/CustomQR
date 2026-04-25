@@ -1,7 +1,12 @@
 :root {
-  --cherry-zenith: #c8dde8;
-  --cherry-horizon: #e2e5e0;
-  --cherry-bloom: #e8a8bc;
+  /* 기본 = Spring; index.html 인라인으로 data-season 보정 */
+  --sky-top: #c4d9e8;
+  --sky-mid: #e0e6e1;
+  --sky-bloom: #e8a8bc;
+  --sky-foot: color-mix(in srgb, var(--sky-bloom) 36%, #fff 64%);
+  --sky-aura-1: color-mix(in srgb, var(--sky-bloom) 52%, transparent);
+  --sky-aura-2: rgba(150, 190, 255, 0.28);
+  --sky-aura-3: rgba(255, 255, 255, 0.26);
 
   --text: #6b6375;
   --text-h: #08060d;
@@ -34,7 +39,77 @@
   }
 }
 
+html[data-season='summer'] {
+  --sky-top: #9ec9e8;
+  --sky-mid: #c8e8d4;
+  --sky-bloom: #56b88a;
+  --sky-foot: color-mix(in srgb, var(--sky-bloom) 28%, #f2faf4 72%);
+  --sky-aura-1: color-mix(in srgb, #3d9c7a 45%, transparent);
+  --sky-aura-2: rgba(100, 200, 220, 0.22);
+  --sky-aura-3: rgba(255, 255, 255, 0.32);
+}
+
+html[data-season='autumn'] {
+  --sky-top: #e8c9a8;
+  --sky-mid: #e8ddd4;
+  --sky-bloom: #d97757;
+  --sky-foot: color-mix(in srgb, #f4a84a 32%, #faf6f0 68%);
+  --sky-aura-1: color-mix(in srgb, #c2410c 38%, transparent);
+  --sky-aura-2: rgba(180, 120, 200, 0.18);
+  --sky-aura-3: rgba(255, 248, 235, 0.35);
+}
+
+html[data-season='winter'] {
+  --sky-top: #c5d4e8;
+  --sky-mid: #dce4ee;
+  --sky-bloom: #a8c0dc;
+  --sky-foot: color-mix(in srgb, #e8f0fa 70%, #fff 30%);
+  --sky-aura-1: color-mix(in srgb, #fff 55%, transparent);
+  --sky-aura-2: rgba(140, 170, 220, 0.22);
+  --sky-aura-3: rgba(255, 255, 255, 0.4);
+}
+
 @media (prefers-color-scheme: dark) {
+  :root,
+  html[data-season='spring'] {
+    --sky-top: #1e2830;
+    --sky-mid: #252d34;
+    --sky-bloom: #7a4a5c;
+    --sky-foot: color-mix(in srgb, var(--sky-bloom) 22%, #12151a 78%);
+    --sky-aura-1: color-mix(in srgb, var(--sky-bloom) 35%, transparent);
+    --sky-aura-2: rgba(100, 140, 190, 0.12);
+    --sky-aura-3: rgba(255, 255, 255, 0.06);
+  }
+
+  html[data-season='summer'] {
+    --sky-top: #152824;
+    --sky-mid: #1a3028;
+    --sky-bloom: #3d7a62;
+    --sky-foot: color-mix(in srgb, var(--sky-bloom) 18%, #121a16 82%);
+    --sky-aura-1: color-mix(in srgb, #5cb89a 28%, transparent);
+    --sky-aura-2: rgba(80, 160, 180, 0.1);
+    --sky-aura-3: rgba(255, 255, 255, 0.05);
+  }
+
+  html[data-season='autumn'] {
+    --sky-top: #2a2218;
+    --sky-mid: #30251c;
+    --sky-bloom: #a65d32;
+    --sky-foot: color-mix(in srgb, #b87333 20%, #161210 80%);
+    --sky-aura-1: color-mix(in srgb, #d97706 25%, transparent);
+    --sky-aura-2: rgba(160, 120, 180, 0.08);
+    --sky-aura-3: rgba(255, 230, 200, 0.04);
+  }
+
+  html[data-season='winter'] {
+    --sky-top: #1a222c;
+    --sky-mid: #222c38;
+    --sky-bloom: #5a7090;
+    --sky-foot: color-mix(in srgb, #3d4d60 35%, #0f1318 65%);
+    --sky-aura-1: color-mix(in srgb, #a8c0e0 18%, transparent);
+    --sky-aura-2: rgba(100, 130, 180, 0.1);
+    --sky-aura-3: rgba(255, 255, 255, 0.07);
+  }
   :root {
     --text: #9ca3af;
     --text-h: #f3f4f6;
@@ -72,9 +147,9 @@ body {
   position: relative;
   background: linear-gradient(
     170deg,
-    var(--cherry-zenith) 0%,
-    var(--cherry-horizon) 45%,
-    color-mix(in srgb, var(--cherry-bloom) 38%, #fff 62%) 100%
+    var(--sky-top) 0%,
+    var(--sky-mid) 45%,
+    var(--sky-foot) 100%
   );
 }
 
@@ -86,17 +161,17 @@ body::before {
   pointer-events: none;
   background: radial-gradient(
       ellipse 120% 80% at 10% 5%,
-      color-mix(in srgb, var(--cherry-bloom) 55%, transparent) 0%,
+      var(--sky-aura-1) 0%,
       transparent 55%
     ),
     radial-gradient(
       ellipse 90% 60% at 88% 92%,
-      rgba(150, 190, 255, 0.28) 0%,
+      var(--sky-aura-2) 0%,
       transparent 50%
     ),
     radial-gradient(
       ellipse 70% 50% at 50% 40%,
-      rgba(255, 255, 255, 0.25) 0%,
+      var(--sky-aura-3) 0%,
       transparent 45%
     );
   animation: bg-aurora 22s ease-in-out infinite alternate;
